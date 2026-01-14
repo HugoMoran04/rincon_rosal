@@ -63,29 +63,29 @@ app.use(express.static(path.join(__dirname, "public")));
 //Ruta para manejar las solicitudes al archivo index.html
 // app.get('/', (req, res) => {
 //app.get("/*", (req, res) => {
-app.use((req, res, next) => {
-  if (req.path.startsWith("/api")) return next();
+if (process.env.NODE_ENV !== "production") {
+  console.log("Sirviendo ficheros de desarrollo");
 
-  if (process.env.NODE_ENV !== "production") {
-    console.log("Sirviendo ficheros de desarrollo");
-    // Configurar el middleware para servir archivos estáticos desde el directorio public/dev en desarrollo
-    app.use(express.static(path.join(__dirname, "public/dev")));
+  app.use(express.static(path.join(__dirname, "public/dev")));
 
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(__dirname, "public/dev", "index.html"));
-    });
-  } else {
-    console.log("Sirviendo ficheros de producción");
-    // Configurar el middleware para servir archivos estáticos desde el directorio public/dev en producción
-    app.use(express.static(path.join(__dirname, "public/prod")));
+  app.get("/*", (req, res) => {
+    if (req.path.startsWith("/api")) return res.sendStatus(404);
+    res.sendFile(path.join(__dirname, "public/dev", "index.html"));
+  });
 
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(__dirname, "public/prod", "index.html"));
-    });
-  }
-});
+} else {
+  console.log("Sirviendo ficheros de producción");
+
+  app.use(express.static(path.join(__dirname, "public/prod")));
+
+  app.get("/*", (req, res) => {
+    if (req.path.startsWith("/api")) return res.sendStatus(404);
+    res.sendFile(path.join(__dirname, "public/prod", "index.html"));
+  });
+}
 
 // Iniciar el servidor
 app.listen(config.port, () => {
   console.log(`Servidor escuchando en el puerto ${config.port}`);
 });
+
