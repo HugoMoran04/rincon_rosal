@@ -1,0 +1,12 @@
+version: "3.1"
+services:
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        
+        ports:
+            - 8080:80
+        environment:
+            - PMA_HOST=trolley.proxy.rlwy.net:21126
+            - PMA_USER=root
+            - PMA_PORT=21126
+            - PMA_PASSWORD=wAuumZkfNlszTrYoDOJWBxXNZxiJrHyT
