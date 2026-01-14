@@ -68,7 +68,7 @@ if (process.env.NODE_ENV !== "production") {
 
   app.use(express.static(path.join(__dirname, "public/dev")));
 
-  app.get("/*", (req, res) => {
+  app.get("/(.*)", (req, res) => {
     if (req.path.startsWith("/api")) return res.sendStatus(404);
     res.sendFile(path.join(__dirname, "public/dev", "index.html"));
   });
@@ -78,7 +78,7 @@ if (process.env.NODE_ENV !== "production") {
 
   app.use(express.static(path.join(__dirname, "public/prod")));
 
-  app.get("/*", (req, res) => {
+  app.get("/(.*)", (req, res) => {
     if (req.path.startsWith("/api")) return res.sendStatus(404);
     res.sendFile(path.join(__dirname, "public/prod", "index.html"));
   });
@@ -88,4 +88,5 @@ if (process.env.NODE_ENV !== "production") {
 app.listen(config.port, () => {
   console.log(`Servidor escuchando en el puerto ${config.port}`);
 });
+
 
